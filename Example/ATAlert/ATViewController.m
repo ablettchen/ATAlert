@@ -38,7 +38,8 @@
                                       @"Alert - Confirm", \
                                       @"Alert - Confirm / Without title", \
                                       @"Alert - Link", \
-                                      @"Alert - Input"]];
+                                      @"Alert - Input", \
+                                      @"Sheet - Default"]];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -153,8 +154,7 @@
         [alert addMessageLinks:links];
         [alert show];
         
-    }
-    else {
+    }else if ([title isEqualToString:@"Alert - Input"]) {
         
         NSString *message = @"您的班级信息数据已更新完成,请重新刷新列表查看最新数据.";
         NSArray *actions = @[ATAlertNormalActionMake(@"取消", ^(ATAlertAction * _Nonnull action) {
@@ -181,6 +181,10 @@
         }];
         
         [self.view showAlert:alert];
+        
+    }else if ([title isEqualToString:@"Sheet - Default"]) {
+        //@"Sheet - Default"
+        
         
     }
     

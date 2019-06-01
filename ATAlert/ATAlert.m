@@ -273,10 +273,7 @@ static UIViewController *_at_get_top_view_controller() {
     }
 }
 
-- (void)showIn:(UIView *)view completion:(void(^)(BOOL finished))completion {
-    
-    NSAssert(self.message.length > 0, @"message could not be nil");
-    NSAssert(self.actions.count > 0, @"could not find any actions");
+- (void)showAlertIn:(UIView *)view completion:(void(^)(BOOL finished))completion {
     
     [view addSubview:self.backgroundView];
     [self.backgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -352,7 +349,7 @@ static UIViewController *_at_get_top_view_controller() {
         self.messageLabel.attributedText = attributedText;
         lastAttribute = self.messageLabel.mas_bottom;
     }
-
+    
     
     if (self.textFields.count > 0) {
         
@@ -363,7 +360,7 @@ static UIViewController *_at_get_top_view_controller() {
         }];
         
         MASViewAttribute *lastUnputAttribute = lastAttribute;
-
+        
         for (UITextField *obj in self.textFields) {
             NSUInteger idx = [self.textFields indexOfObject:obj];
             [self.inputView addSubview:obj];
@@ -374,14 +371,14 @@ static UIViewController *_at_get_top_view_controller() {
             }];
             lastUnputAttribute = obj.mas_bottom;
         }
-
+        
         [self.inputView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(lastUnputAttribute);
         }];
-
+        
         lastAttribute = self.inputView.mas_bottom;
     }
-
+    
     if (self.buttons.count > 0) {
         
         [self.contentView addSubview:self.actionView];
@@ -448,6 +445,22 @@ static UIViewController *_at_get_top_view_controller() {
                          self.contentView.alpha = 1.0f;
                      }
                      completion:completion];
+}
+
+- (void)showSheetIn:(UIView *)view completion:(void(^)(BOOL finished))completion {
+    
+}
+
+- (void)showIn:(UIView *)view completion:(void(^)(BOOL finished))completion {
+    
+    NSAssert(self.message.length > 0, @"message could not be nil");
+    NSAssert(self.actions.count > 0, @"could not find any actions");
+    
+    if (self.preferredStyle == ATAlertStyleAlert) {
+        [self showAlertIn:view completion:completion];
+    }else if (self.preferredStyle == ATAlertStyleSheet) {
+        [self showSheetIn:view completion:completion];
+    }
 }
 
 - (void)show:(void(^ __nullable)(BOOL finished))completion {
