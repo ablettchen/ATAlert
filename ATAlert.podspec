@@ -22,6 +22,5 @@ Pod::Spec.new do |s|
     
     s.dependency 'ATCategories'
     s.dependency 'Masonry'
-    s.dependency 'ATToast'
     
 end

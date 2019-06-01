@@ -1,4 +1,5 @@
-use_frameworks!
+# use_frameworks!
+inhibit_all_warnings!
 
 platform :ios, '8.0'
 
@@ -6,7 +7,8 @@ target 'ATAlert_Example' do
   pod 'ATAlert', :path => '../'
   target 'ATAlert_Tests' do
     inherit! :search_paths
-
-    
   end
+  
+  pod 'ATToast'
+  
 end

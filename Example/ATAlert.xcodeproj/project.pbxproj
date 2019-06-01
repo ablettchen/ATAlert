@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		26445A0E9E60E808C65C10B0 /* Pods_ATAlert_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 807486B31CFC4AF19693E7F5 /* Pods_ATAlert_Tests.framework */; };
-		4F0532D27B4614B98E523CF2 /* Pods_ATAlert_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A54E856C13E18A4F6177BF44 /* Pods_ATAlert_Example.framework */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -24,6 +22,8 @@
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		D8C25A29F2238C6CD45A659F /* libPods-ATAlert_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2664E0AF4CA7FCF7610B5BD4 /* libPods-ATAlert_Example.a */; };
+		F870E9AFC55DEBCBD5E7D87B /* libPods-ATAlert_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D7B77486C3EC08651E50E1F /* libPods-ATAlert_Tests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2664E0AF4CA7FCF7610B5BD4 /* libPods-ATAlert_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ATAlert_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51BF186F0E036AB00C8E276E /* Pods-ATAlert_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ATAlert_Example.release.xcconfig"; path = "Target Support Files/Pods-ATAlert_Example/Pods-ATAlert_Example.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* ATAlert_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ATAlert_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -61,9 +62,8 @@
 		6EAF565D4CC237165E1D8F6E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		706B5868FC5A3B8C136FE3BB /* ATAlert.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ATAlert.podspec; path = ../ATAlert.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		807486B31CFC4AF19693E7F5 /* Pods_ATAlert_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ATAlert_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		A54E856C13E18A4F6177BF44 /* Pods_ATAlert_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ATAlert_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D7B77486C3EC08651E50E1F /* libPods-ATAlert_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ATAlert_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC314DEEC1442B73BC4A57E3 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		EF0FBCBDE247DFFA57869D3B /* Pods-ATAlert_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ATAlert_Tests.release.xcconfig"; path = "Target Support Files/Pods-ATAlert_Tests/Pods-ATAlert_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		F4E2224846B28453FF0FC9A5 /* Pods-ATAlert_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ATAlert_Example.debug.xcconfig"; path = "Target Support Files/Pods-ATAlert_Example/Pods-ATAlert_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -77,7 +77,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				4F0532D27B4614B98E523CF2 /* Pods_ATAlert_Example.framework in Frameworks */,
+				D8C25A29F2238C6CD45A659F /* libPods-ATAlert_Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,7 +88,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				26445A0E9E60E808C65C10B0 /* Pods_ATAlert_Tests.framework in Frameworks */,
+				F870E9AFC55DEBCBD5E7D87B /* libPods-ATAlert_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,8 +123,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				A54E856C13E18A4F6177BF44 /* Pods_ATAlert_Example.framework */,
-				807486B31CFC4AF19693E7F5 /* Pods_ATAlert_Tests.framework */,
+				2664E0AF4CA7FCF7610B5BD4 /* libPods-ATAlert_Example.a */,
+				9D7B77486C3EC08651E50E1F /* libPods-ATAlert_Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -207,7 +207,6 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				ADE1640AB7C08BD7BFD1C8CC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -337,30 +336,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		ADE1640AB7C08BD7BFD1C8CC /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ATAlert_Example/Pods-ATAlert_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/ATAlert/ATAlert.framework",
-				"${BUILT_PRODUCTS_DIR}/ATCategories/ATCategories.framework",
-				"${BUILT_PRODUCTS_DIR}/ATToast/ATToast.framework",
-				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ATAlert.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ATCategories.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ATToast.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ATAlert_Example/Pods-ATAlert_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
