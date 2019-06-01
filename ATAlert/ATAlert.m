@@ -89,6 +89,9 @@ static UIViewController *_at_get_top_view_controller() {
 @property (nonatomic, strong, readonly) UIView *inputView;
 @property (nonatomic, strong, readonly) UIView *actionView;
 
+@property (nonatomic, strong, readonly) UIView *sheetTitleView;
+@property (nonatomic, strong, readonly) UIButton *sheetCancelBtn;
+
 @property (nonatomic, strong, readonly) YYLabel *titleLabel;
 @property (nonatomic, strong, readonly) YYLabel *messageLabel;
 
@@ -101,6 +104,8 @@ static UIViewController *_at_get_top_view_controller() {
 @synthesize contentView = _contentView;
 @synthesize inputView = _inputView;
 @synthesize actionView = _actionView;
+@synthesize sheetTitleView = _sheetTitleView;
+@synthesize sheetCancelBtn = _sheetCancelBtn;
 @synthesize titleLabel = _titleLabel;
 @synthesize messageLabel = _messageLabel;
 
@@ -131,6 +136,11 @@ static UIViewController *_at_get_top_view_controller() {
 - (void)setPreferredStyle:(enum ATAlertStyle)preferredStyle {
     _preferredStyle = preferredStyle;
     self.conf.touchWildToHide = preferredStyle == ATAlertStyleSheet ? : NO;
+    if (self.preferredStyle == ATAlertStyleSheet) {
+        self.conf.insets = UIEdgeInsetsMake(15, 15, 15, 15);
+        self.conf.cornerRadius = 0.f;
+        self.conf.messageColor = UIColorHex(0x666666FF);
+    }
 }
 
 - (void (^)(void (^ _Nonnull)(ATAlertConf * _Nonnull)))update {
@@ -139,63 +149,65 @@ static UIViewController *_at_get_top_view_controller() {
         __strong typeof(_self) self = _self;
         if ( !self ) return;
         if ( block ) block(self.conf);
-        if (self.preferredStyle == ATAlertStyleAlert) {
-            ///backgroundView
-            self.backgroundView.backgroundColor = self.conf.dimBackgroundColor;
-            ///contentView
-            self.contentView.backgroundColor = self.conf.backgroundColor;
-            self.contentView.layer.cornerRadius = self.conf.cornerRadius;
-            self.contentView.layer.borderWidth = self.conf.splitWidth;
-            self.contentView.layer.borderColor = self.conf.splitColor.CGColor;
-            ///titleLabel
-            //self.titleLabel.backgroundColor = self.conf.backgroundColor;
-            self.titleLabel.font = self.conf.titleFont;
-            self.titleLabel.textColor = self.conf.titleColor;
-            self.titleLabel.textAlignment = NSTextAlignmentCenter;
-            ///messageLabel
-            //self.messageLabel.backgroundColor = self.contentView.backgroundColor;
-            self.messageLabel.font = self.conf.messageFont;
-            self.messageLabel.textColor = self.conf.messageColor;
-            if (self.conf.messageWildAlignmentCenter) self.messageLabel.textAlignment = NSTextAlignmentCenter;
-            ///actionView
-            //self.actionView.backgroundColor = self.conf.backgroundColor;
-            
-            ///action buttons
-            [self.buttons removeAllObjects];
-            
-            for (int i=0; i<self.actions.count; i++) {
-                ATAlertAction *obj = self.actions[i];
-                UIButton *button = [UIButton buttonWithTarget:self action:@selector(actionButton:)];
-                [button setTitle:obj.title forState:UIControlStateNormal];
-                switch (obj.style) {
-                    case ATAlertActionStyleNormal:
-                        [button setTitleColor:self.conf.actionColor forState:UIControlStateNormal];
-                        break;
-                    case ATAlertActionStyleHilighted:
-                        [button setTitleColor:self.conf.actionHightedColor forState:UIControlStateNormal];
-                        break;
-                    case ATAlertActionStyleDisabled:
-                        [button setEnabled:NO];
-                    default:
-                        break;
-                }
-                [button setBackgroundImage:[UIImage imageWithColor:self.conf.backgroundColor] forState:UIControlStateNormal];
-                [button setBackgroundImage:[UIImage imageWithColor:self.conf.actionPressBGColor] forState:UIControlStateHighlighted];
-                button.layer.borderWidth = self.conf.splitWidth;
-                button.layer.borderColor = self.conf.splitColor.CGColor;
-                [button.titleLabel setFont:((i != 0) && (i == (self.actions.count-1)))?self.conf.actionBoldFont:self.conf.actionFont];
-                [button setTag:i];
-                [self.buttons addObject:button];
+        ///backgroundView
+        self.backgroundView.backgroundColor = self.conf.dimBackgroundColor;
+        ///contentView
+        self.contentView.backgroundColor = (self.preferredStyle == ATAlertStyleAlert) ? self.conf.backgroundColor : self.conf.sheetBackgroundColor;
+        self.contentView.layer.cornerRadius = self.conf.cornerRadius;
+        self.contentView.layer.borderWidth = self.conf.splitWidth;
+        self.contentView.layer.borderColor = self.conf.splitColor.CGColor;
+        ///titleLabel
+        self.titleLabel.backgroundColor = self.conf.backgroundColor;
+        self.titleLabel.font = self.conf.titleFont;
+        self.titleLabel.textColor = self.conf.titleColor;
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
+        
+        self.sheetTitleView.backgroundColor = self.conf.backgroundColor;
+        self.sheetCancelBtn.backgroundColor = self.conf.backgroundColor;
+        
+        ///messageLabel
+        self.messageLabel.backgroundColor = self.conf.backgroundColor;
+        self.messageLabel.font = self.conf.messageFont;
+        self.messageLabel.textColor = self.conf.messageColor;
+        if (self.conf.messageWildAlignmentCenter) self.messageLabel.textAlignment = NSTextAlignmentCenter;
+        ///actionView
+        self.actionView.backgroundColor = self.conf.backgroundColor;
+        
+        ///action buttons
+        [self.buttons removeAllObjects];
+        
+        for (int i=0; i<self.actions.count; i++) {
+            ATAlertAction *obj = self.actions[i];
+            UIButton *button = [UIButton buttonWithTarget:self action:@selector(actionButton:)];
+            [button setTitle:obj.title forState:UIControlStateNormal];
+            switch (obj.style) {
+                case ATAlertActionStyleNormal:
+                    [button setTitleColor:self.conf.actionColor forState:UIControlStateNormal];
+                    break;
+                case ATAlertActionStyleHilighted:
+                    [button setTitleColor:self.conf.actionHightedColor forState:UIControlStateNormal];
+                    break;
+                case ATAlertActionStyleDisabled:
+                    [button setTitleColor:UIColorHex(0xccccccFF) forState:UIControlStateNormal];
+                    [button setEnabled:NO];
+                default:
+                    break;
             }
-
-            ///< inputView
-            for (UITextField *obj in self.textFields) {
-                //obj.backgroundColor = self.conf.backgroundColor;
-                obj.font = self.conf.messageFont;
-                obj.textColor = self.conf.messageColor;
-                obj.layer.borderWidth = self.conf.splitWidth;
-                obj.layer.borderColor = self.conf.splitColor.CGColor;
-            }
+            [button setBackgroundImage:[UIImage imageWithColor:self.conf.backgroundColor] forState:UIControlStateNormal];
+            [button setBackgroundImage:[UIImage imageWithColor:self.conf.actionPressBGColor] forState:UIControlStateHighlighted];
+            button.layer.borderWidth = self.conf.splitWidth;
+            button.layer.borderColor = self.conf.splitColor.CGColor;
+            [button.titleLabel setFont:((i != 0) && (i == (self.actions.count-1)) && (self.preferredStyle == ATAlertStyleAlert))?self.conf.actionBoldFont:self.conf.actionFont];
+            [button setTag:i];
+            [self.buttons addObject:button];
+        }
+        
+        ///< inputView
+        for (UITextField *obj in self.textFields) {
+            obj.font = self.conf.messageFont;
+            obj.textColor = self.conf.messageColor;
+            obj.layer.borderWidth = self.conf.splitWidth;
+            obj.layer.borderColor = self.conf.splitColor.CGColor;
         }
     };
 }
@@ -243,6 +255,23 @@ static UIViewController *_at_get_top_view_controller() {
     return _actionView;
 }
 
+- (UIView *)sheetTitleView {
+    if (_sheetTitleView) return _sheetTitleView;
+    _sheetTitleView = [UIView new];
+    return _sheetTitleView;
+}
+
+- (UIButton *)sheetCancelBtn {
+    if (_sheetCancelBtn) return _sheetCancelBtn;
+    _sheetCancelBtn = [UIButton buttonWithTarget:self action:@selector(hide)];
+    [_sheetCancelBtn setTitle:self.conf.actionCancelText forState:UIControlStateNormal];
+    [_sheetCancelBtn setTitleColor:self.conf.actionColor forState:UIControlStateNormal];
+    [_sheetCancelBtn setBackgroundImage:[UIImage imageWithColor:self.conf.backgroundColor] forState:UIControlStateNormal];
+    [_sheetCancelBtn setBackgroundImage:[UIImage imageWithColor:self.conf.actionPressBGColor] forState:UIControlStateHighlighted];
+    [_sheetCancelBtn.titleLabel setFont:self.conf.actionFont];
+    return _sheetCancelBtn;
+}
+
 - (YYLabel *)titleLabel {
     if (_titleLabel) return _titleLabel;
     _titleLabel = [YYLabel new];
@@ -283,7 +312,6 @@ static UIViewController *_at_get_top_view_controller() {
     [self.backgroundView addSubview:self.contentView];
     [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self.conf.width);
-        make.center.equalTo(self.backgroundView);
     }];
     
     MASViewAttribute *lastAttribute = self.contentView.mas_top;
@@ -387,8 +415,6 @@ static UIViewController *_at_get_top_view_controller() {
             make.left.right.equalTo(self.contentView);
         }];
         
-        MASViewAttribute *lastActionAttribute = lastAttribute;
-        
         __block UIButton *firstButton = nil;
         __block UIButton *lastButton = nil;
         for (int i=0; i<self.buttons.count; i++) {
@@ -436,7 +462,7 @@ static UIViewController *_at_get_top_view_controller() {
     }];
     
     self.contentView.layer.transform = CATransform3DMakeScale(1.2f, 1.2f, 1.0f);
-    [UIView animateWithDuration:0.2
+    [UIView animateWithDuration:0.3
                           delay:0
                         options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
@@ -448,6 +474,145 @@ static UIViewController *_at_get_top_view_controller() {
 }
 
 - (void)showSheetIn:(UIView *)view completion:(void(^)(BOOL finished))completion {
+    
+    [view addSubview:self.backgroundView];
+    [self.backgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(view);
+    }];
+    
+    [self.backgroundView addSubview:self.contentView];
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(SCREEN_WIDTH);
+    }];
+    
+    MASViewAttribute *lastAttribute = self.contentView.mas_top;
+    
+    CGFloat labelWidth = SCREEN_WIDTH-self.conf.insets.left-self.conf.insets.right;
+    
+    if (self.message.stringByTrim.length > 0) {
+        
+        [self.contentView addSubview:self.sheetTitleView];
+        [self.sheetTitleView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.right.equalTo(self.contentView);
+        }];
+        
+        NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:self.message];
+        attributedText.yy_font = self.messageLabel.font;
+        attributedText.yy_color = self.messageLabel.textColor;
+        attributedText.yy_lineSpacing = self.conf.lineSpace;
+        
+        YYTextLayout *textLayout = [YYTextLayout layoutWithContainerSize:CGSizeMake(labelWidth, CGFLOAT_MAX) text:attributedText];
+        attributedText.yy_alignment = (self.conf.messageWildAlignmentCenter) ? NSTextAlignmentCenter : ((textLayout.lines.count > 1) ? NSTextAlignmentLeft : NSTextAlignmentCenter);
+        self.messageLabel.textLayout = textLayout;
+        
+        [self.sheetTitleView addSubview:self.messageLabel];
+        [self.messageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.right.equalTo(self.contentView).insets(self.conf.insets);
+            make.height.mas_equalTo(textLayout.textBoundingSize.height);
+        }];
+        
+        for (ATAlertLink *obj in self.links) {
+            if (![attributedText.string containsString:obj.text]) {continue;}
+            NSRange linkRange = [attributedText.string rangeOfString:obj.text];
+            [attributedText yy_setTextHighlightRange:linkRange
+                                               color:obj.color?:self.conf.linkColor
+                                     backgroundColor:obj.backgroundColor?:self.conf.linkBackgroundColor
+                                           tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+                                               if (obj.handler) {
+                                                   [self hide:^(BOOL finished) {
+                                                       if (finished) obj.handler(obj);
+                                                   }];
+                                               }
+                                           }];
+        }
+        
+        self.messageLabel.attributedText = attributedText;
+
+        [self.sheetTitleView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.messageLabel).offset(self.conf.insets.bottom);
+        }];
+        
+        lastAttribute = self.sheetTitleView.mas_bottom;
+    }
+    
+    if (self.buttons.count > 0) {
+        
+        [self.contentView addSubview:self.actionView];
+        [self.actionView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(lastAttribute);
+            make.left.right.equalTo(self.contentView);
+        }];
+        
+        __block UIButton *firstButton = nil;
+        __block UIButton *lastButton = nil;
+        for (int i=0; i<self.buttons.count; i++) {
+            UIButton *obj = self.buttons[i];
+            [self.actionView addSubview:obj];
+            [obj mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self.actionView).insets(UIEdgeInsetsMake(0, -self.conf.splitWidth, 0, -self.conf.splitWidth));
+                make.height.mas_equalTo(self.conf.actionHeight);
+                if (!firstButton) {
+                    firstButton = obj;
+                    make.top.equalTo(self.actionView.mas_top).offset(-self.conf.splitWidth);
+                }else {
+                    make.top.equalTo(lastButton.mas_bottom).offset(-self.conf.splitWidth);
+                    make.height.equalTo(firstButton);
+                }
+                lastButton = obj;
+            }];
+        }
+        [lastButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.actionView.mas_bottom).offset(-self.conf.splitWidth);
+        }];
+        
+        [self.contentView addSubview:self.sheetCancelBtn];
+        [self.sheetCancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self.actionView);
+            make.height.mas_equalTo(self.conf.actionHeight);
+            make.top.equalTo(self.actionView.mas_bottom).offset(8);
+        }];
+        
+        CGFloat height = IS_IPHONE_X ? 33 : 0;
+        
+        UIView *extraView = ({
+            UIView *view = [UIView new];
+            [self.contentView addSubview:view];
+            [view mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(self.sheetCancelBtn.mas_bottom);
+                make.left.right.mas_equalTo(self.contentView);
+                make.height.mas_equalTo(height);
+            }];
+            
+            view.backgroundColor = self.conf.backgroundColor;
+            view;
+        });
+
+        lastAttribute = extraView.mas_bottom;
+        
+        [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(lastAttribute);
+        }];
+    }
+    
+    [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.backgroundView);
+        make.bottom.equalTo(self.backgroundView).offset(self.backgroundView.superview.at_height);
+    }];
+    [self.backgroundView layoutIfNeeded];
+    
+    self.contentView.alpha = 1.0f;
+    
+    [UIView animateWithDuration:0.3
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         self.backgroundView.alpha = 1.0f;
+                         [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+                             make.bottom.equalTo(self.backgroundView).offset(0);
+                         }];
+                         [self.backgroundView layoutIfNeeded];
+                     }
+                     completion:completion];
     
 }
 
@@ -467,8 +632,8 @@ static UIViewController *_at_get_top_view_controller() {
     [self showIn:[[UIApplication sharedApplication] keyWindow] completion:completion];
 }
 
-- (void)hide:(void(^ __nullable)(BOOL finished))completion {
-    [UIView animateWithDuration:0.2
+- (void)hideAlert:(void(^ __nullable)(BOOL finished))completion {
+    [UIView animateWithDuration:0.3
                           delay:0
                         options: UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
@@ -482,6 +647,34 @@ static UIViewController *_at_get_top_view_controller() {
                          }
                          if (completion) {completion(finished);}
                      }];
+}
+
+- (void)hideSheet:(void(^ __nullable)(BOOL finished))completion {
+    [UIView animateWithDuration:0.3
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         self.backgroundView.alpha = 0.001f;
+                         [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+                             make.bottom.equalTo(self.backgroundView.mas_bottom).offset(self.backgroundView.superview.at_height);
+                         }];
+                         [self.backgroundView layoutIfNeeded];
+                     }
+                     completion:^(BOOL finished) {
+                         if (finished) {
+                             [self.contentView removeFromSuperview], _contentView = nil;
+                             [self.backgroundView removeFromSuperview], _backgroundView = nil;
+                         }
+                         if (completion) {completion(finished);}
+                     }];
+}
+
+- (void)hide:(void(^ __nullable)(BOOL finished))completion {
+    if (self.preferredStyle == ATAlertStyleAlert) {
+        [self hideAlert:completion];
+    }else if (self.preferredStyle == ATAlertStyleSheet) {
+        [self hideSheet:completion];
+    }
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -555,6 +748,7 @@ static UIViewController *_at_get_top_view_controller() {
     
     _dimBackgroundColor = UIColorHex(0x0000007F);
     _backgroundColor    = UIColorHex(0xFFFFFFFF);
+    _sheetBackgroundColor = UIColorHex(0xE7E7E7FF);
     
     _titleFont          = [UIFont boldSystemFontOfSize:18];
     _titleColor         = UIColorHex(0x333333FF);
@@ -578,7 +772,7 @@ static UIViewController *_at_get_top_view_controller() {
     
     _actionHeight       = 50.f;
     
-    _splitColor         = UIColorHex(0xCCCCCCFF);
+    _splitColor         = UIColorHex(0xE7E7E7FF);
     _splitWidth         = 1/[UIScreen mainScreen].scale;
     
     _actionOkText       = @"好";

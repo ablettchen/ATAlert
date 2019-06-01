@@ -185,9 +185,27 @@
     }else if ([title isEqualToString:@"Sheet - Default"]) {
         //@"Sheet - Default"
         
+        NSArray *actions = @[ATAlertNormalActionMake(@"Normal", ^(ATAlertAction * _Nonnull action) {
+            NSLog(@"%@", action.title);
+        }), ATAlertHilightedActionMake(@"Highlighted", ^(ATAlertAction * _Nonnull action) {
+            NSLog(@"%@", action.title);
+        }), ATAlertDisabledActionMake(@"Disabled", ^(ATAlertAction * _Nonnull action) {
+            NSLog(@"%@", action.title);
+        })];
         
+        NSArray *links = @[ATAlertLinkMake(@"a", ^(ATAlertLink * _Nonnull action) {
+            NSLog(@"%@", action.text);
+        })];
+        
+        ATAlert *alert = \
+        [ATAlert alertWithPreferredStyle:ATAlertStyleSheet
+                                   title:@"提示"
+                                 message:@"hahaha"
+                                 actions:actions];
+        
+        [alert addMessageLinks:links];
+        [alert show];
     }
-    
 }
 
 @end

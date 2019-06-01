@@ -106,6 +106,7 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 
 @property (nonatomic, strong) UIColor *dimBackgroundColor;  ///< default is 0x0000007F
 @property (nonatomic, strong) UIColor *backgroundColor;     ///< default is 0xFFFFFFFF.
+@property (nonatomic, strong) UIColor *sheetBackgroundColor;///< default is 0xE7E7E7FF.
 
 @property (nonatomic, strong) UIFont *titleFont;            ///< default is systemFont(18).
 @property (nonatomic, strong) UIColor *titleColor;          ///< default is 0x333333FF.
@@ -131,7 +132,7 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 
 @property (nonatomic, assign) CGFloat actionHeight;         ///< Default is 50.
 
-@property (nonatomic, strong) UIColor *splitColor;          ///< default is 0xCCCCCCFF.
+@property (nonatomic, strong) UIColor *splitColor;          ///< default is 0xE7E7E7FF.
 @property (nonatomic, assign) CGFloat splitWidth;           ///< default is 1/[UIScreen mainScreen].scale
 
 @property (nonatomic, strong) NSString *actionOkText;       ///< default is "好".
