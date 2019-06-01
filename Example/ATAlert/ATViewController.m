@@ -11,6 +11,7 @@
 #import <Masonry.h>
 #import <ATAlert.h>
 #import <ATAlert+Make.h>
+#import <UIView+ATAlert.h>
 
 #if __has_include(<ATToast/UIView+ATToast.h>)
 #import <ATToast/UIView+ATToast.h>
@@ -179,10 +180,9 @@
             textField.placeholder = @"请输入年龄~";
         }];
         
-        [alert show];
+        [self.view showAlert:alert];
         
     }
-    
     
 }
 
