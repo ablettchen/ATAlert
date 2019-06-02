@@ -94,6 +94,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSString *title = self.datas[indexPath.row];
+    
     if ([title isEqualToString:@"Alert - Default"]) {
         
         NSString *message = @"each button take one row if there are more than 2 items";
@@ -104,34 +105,17 @@
         }), ATAlertNormalActionMake(@"Cacel", ^(ATAlertAction * _Nonnull action) {
             NSLog(@"%@", action.title);
         })];
-        NSArray *links = @[ATAlertLinkMake(@"one row", ^(ATAlertLink * _Nonnull action) {
-            NSLog(@"%@", action.text);
-        })];
-        ATAlert *alert = \
-        [ATAlert alertWithTitle:title message:message actions:actions];
-        [alert addMessageLinks:links];
-        [alert show];
+        [[ATAlert alertWithTitle:title message:message actions:actions] show];
+
         
     }else if ([title isEqualToString:@"Alert - Confirm"]) {
         
-        NSArray *links = @[ATAlertLinkMake(@"Dialog", ^(ATAlertLink * _Nonnull action) {
-            NSLog(@"%@", action.text);
-        })];
-        ATAlert *alert = \
-        [ATAlert alertWithTitle:title message:@"Confirm Dialog"];
-        [alert addMessageLinks:links];
-        [alert show];
+        [[ATAlert alertWithTitle:title message:@"Confirm Dialog"] show];
         
     }else if ([title isEqualToString:@"Alert - Confirm / Without title"]) {
         
         NSString *message = @"您的班级信息数据已更新完成,请重新刷新列表查看最新数据.";
-        NSArray *links = @[ATAlertLinkMake(@"班级信息", ^(ATAlertLink * _Nonnull action) {
-            NSLog(@"%@", action.text);
-        })];
-        ATAlert *alert = \
-        [ATAlert alertWithTitle:nil message:message];
-        [alert addMessageLinks:links];
-        [alert show];
+        [[ATAlert alertWithTitle:nil message:message] show];
         
     }else if ([title isEqualToString:@"Alert - Link"]) {
         
@@ -160,28 +144,20 @@
         }), ATAlertHilightedActionMake(@"确定", ^(ATAlertAction * _Nonnull action) {
             NSLog(@"%@", action.title);
         })];
-        NSArray *links = @[ATAlertLinkMake(@"刷新列表", ^(ATAlertLink * _Nonnull action) {
-            NSLog(@"%@", action.text);
-        })];
-        
         ATAlert *alert = \
         [ATAlert alertWithPreferredStyle:ATAlertStyleAlert
                                    title:@"提示"
                                  message:message
                                  actions:actions];
-        [alert addMessageLinks:links];
         [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
             textField.placeholder = @"请输入昵称~";
         }];
-        
         [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
             textField.placeholder = @"请输入年龄~";
         }];
-        
         [self.view showAlert:alert];
         
     }else if ([title isEqualToString:@"Sheet - Default"]) {
-        //@"Sheet - Default"
         
         NSArray *actions = @[ATAlertNormalActionMake(@"Normal", ^(ATAlertAction * _Nonnull action) {
             NSLog(@"%@", action.title);
@@ -190,18 +166,12 @@
         }), ATAlertDisabledActionMake(@"Disabled", ^(ATAlertAction * _Nonnull action) {
             NSLog(@"%@", action.title);
         })];
-        
-        NSArray *links = @[ATAlertLinkMake(@"t", ^(ATAlertLink * _Nonnull action) {
-            NSLog(@"%@", action.text);
-        })];
-        
+
         ATAlert *alert = \
         [ATAlert alertWithPreferredStyle:ATAlertStyleSheet
                                    title:nil
-                                 message:@"sheet"
+                                 message:@""
                                  actions:actions];
-        
-        [alert addMessageLinks:links];
         [alert show];
     }
 }

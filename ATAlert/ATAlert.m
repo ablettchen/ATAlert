@@ -130,6 +130,7 @@
 - (void (^)(void (^ _Nonnull)(ATAlertConf * _Nonnull)))update {
     @weakify(self);
     return ^void(void(^block)(ATAlertConf *config)) {
+        @strongify(self);
         if (!self) return;
         if (block) block(self.conf);
         ///backgroundView
@@ -280,12 +281,10 @@
     ATAlertAction *action = self.actions[button.tag];
     if (action.style == ATAlertActionStyleDisabled) {return;}
     [self hide];
-    if (action.handler) {
-        action.handler(action);
-    }
+    if (action.handler) {action.handler(action);}
 }
 
-- (void)showAlertIn:(UIView *)view completion:(void(^)(BOOL finished))completion {
+- (void)showAlertIn:(__weak UIView *)view completion:(void(^)(BOOL finished))completion {
     
     [view addSubview:self.backgroundView];
     [self.backgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -345,11 +344,13 @@
         for (ATAlertLink *obj in self.links) {
             if (![attributedText.string containsString:obj.text]) {continue;}
             NSRange linkRange = [attributedText.string rangeOfString:obj.text];
+            @weakify(self);
             [attributedText yy_setTextHighlightRange:linkRange
                                                color:obj.color?:self.conf.linkColor
                                      backgroundColor:obj.backgroundColor?:self.conf.linkBackgroundColor
                                            tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
                                                if (obj.handler) {
+                                                   @strongify(self);
                                                    [self hide:^(BOOL finished) {
                                                        if (finished) obj.handler(obj);
                                                    }];
@@ -447,10 +448,12 @@
     }];
     
     self.contentView.layer.transform = CATransform3DMakeScale(1.2f, 1.2f, 1.0f);
+    @weakify(self);
     [UIView animateWithDuration:0.3
                           delay:0
                         options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
+                         @strongify(self);
                          self.backgroundView.alpha = 1.0f;
                          self.contentView.layer.transform = CATransform3DIdentity;
                          self.contentView.alpha = 1.0f;
@@ -458,7 +461,7 @@
                      completion:completion];
 }
 
-- (void)showSheetIn:(UIView *)view completion:(void(^)(BOOL finished))completion {
+- (void)showSheetIn:(__weak UIView *)view completion:(void(^)(BOOL finished))completion {
     
     [view addSubview:self.backgroundView];
     [self.backgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -499,10 +502,12 @@
         for (ATAlertLink *obj in self.links) {
             if (![attributedText.string containsString:obj.text]) {continue;}
             NSRange linkRange = [attributedText.string rangeOfString:obj.text];
+            @weakify(self);
             [attributedText yy_setTextHighlightRange:linkRange
                                                color:obj.color?:self.conf.linkColor
                                      backgroundColor:obj.backgroundColor?:self.conf.linkBackgroundColor
                                            tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+                                               @strongify(self);
                                                if (obj.handler) {
                                                    [self hide:^(BOOL finished) {
                                                        if (finished) obj.handler(obj);
@@ -601,7 +606,7 @@
     
 }
 
-- (void)showIn:(UIView *)view completion:(void(^)(BOOL finished))completion {
+- (void)showIn:(__weak UIView *)view completion:(void(^)(BOOL finished))completion {
     
     //NSAssert(self.message.length > 0, @"message could not be nil");
     NSAssert(self.actions.count > 0, @"could not find any actions");
@@ -674,6 +679,7 @@
                                   title:(nullable NSString *)title
                                 message:(nonnull NSString *)message
                                 actions:(nonnull NSArray *)actions {
+    
     ATAlert *alert = [ATAlert new];
     alert.preferredStyle = style;
     alert.title = title;
@@ -704,7 +710,7 @@
     [self show:self.didShow];
 }
 
-- (void)showIn:(UIView *)view {
+- (void)showIn:(__weak UIView *)view; {
     [self showIn:view completion:self.didShow];
 }
 
