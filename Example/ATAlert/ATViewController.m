@@ -10,8 +10,6 @@
 #import <ATCategories.h>
 #import <Masonry.h>
 #import <ATAlert.h>
-#import <ATAlert+Make.h>
-#import <UIView+ATAlert.h>
 
 #if __has_include(<ATToast/UIView+ATToast.h>)
 #import <ATToast/UIView+ATToast.h>
@@ -193,14 +191,14 @@
             NSLog(@"%@", action.title);
         })];
         
-        NSArray *links = @[ATAlertLinkMake(@"a", ^(ATAlertLink * _Nonnull action) {
+        NSArray *links = @[ATAlertLinkMake(@"t", ^(ATAlertLink * _Nonnull action) {
             NSLog(@"%@", action.text);
         })];
         
         ATAlert *alert = \
         [ATAlert alertWithPreferredStyle:ATAlertStyleSheet
-                                   title:@"提示"
-                                 message:@"hahaha"
+                                   title:nil
+                                 message:@"sheet"
                                  actions:actions];
         
         [alert addMessageLinks:links];

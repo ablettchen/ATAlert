@@ -28,4 +28,13 @@
     return [ATAlert alertWithPreferredStyle:ATAlertStyleAlert title:nil message:message actions:actions];
 }
 
++ (instancetype)sheetWithMessage:(nonnull NSString *)message
+                         actions:(nonnull NSArray *)actions {
+    return [ATAlert alertWithPreferredStyle:ATAlertStyleSheet title:nil message:message actions:actions];
+}
+
++ (instancetype)sheetWithActions:(nonnull NSArray *)actions {
+    return [ATAlert alertWithPreferredStyle:ATAlertStyleSheet title:nil message:@"" actions:actions];
+}
+
 @end

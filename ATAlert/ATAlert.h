@@ -27,27 +27,6 @@ typedef NS_ENUM(NSUInteger, ATAlertActionStyle) {
 
 @end
 
-NS_INLINE ATAlertAction *ATAlertActionMake(NSString *title,
-                                           enum ATAlertActionStyle style,
-                                           void(^__nullable handler)(ATAlertAction *action)) {
-    return [ATAlertAction actonWithTitle:title style:style handler:handler];
-}
-
-NS_INLINE ATAlertAction *ATAlertNormalActionMake(NSString *title,
-                                                 void(^__nullable handler)(ATAlertAction *action)) {
-    return ATAlertActionMake(title, ATAlertActionStyleNormal, handler);
-}
-
-NS_INLINE ATAlertAction *ATAlertHilightedActionMake(NSString *title,
-                                                 void(^__nullable handler)(ATAlertAction *action)) {
-    return ATAlertActionMake(title, ATAlertActionStyleHilighted, handler);
-}
-
-NS_INLINE ATAlertAction *ATAlertDisabledActionMake(NSString *title,
-                                                    void(^__nullable handler)(ATAlertAction *action)) {
-    return ATAlertActionMake(title, ATAlertActionStyleDisabled, handler);
-}
-
 @interface ATAlertLink : NSObject
 
 @property (nonnull, copy, nonatomic) NSString *text;
@@ -144,3 +123,6 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 @end
 
 NS_ASSUME_NONNULL_END
+
+#import "ATAlert+Make.h"
+#import "UIView+ATAlert.h"

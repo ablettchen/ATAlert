@@ -24,22 +24,6 @@
 #import "YYText.h"
 #endif
 
-
-static UIViewController *_at_get_top_view_controller() {
-    UIViewController *vc = UIApplication.sharedApplication.keyWindow.rootViewController;
-    while (  [vc isKindOfClass:[UINavigationController class]] ||
-           [vc isKindOfClass:[UITabBarController class]] ||
-           vc.presentedViewController ) {
-        if ( [vc isKindOfClass:[UINavigationController class]] )
-            vc = [(UINavigationController *)vc topViewController];
-        if ( [vc isKindOfClass:[UITabBarController class]] )
-            vc = [(UITabBarController *)vc selectedViewController];
-        if ( vc.presentedViewController )
-            vc = vc.presentedViewController;
-    }
-    return vc;
-}
-
 @interface ATAlertAction ()
 @property (nullable, copy, nonatomic) void(^handler)(ATAlertAction *action);
 @end
@@ -144,11 +128,10 @@ static UIViewController *_at_get_top_view_controller() {
 }
 
 - (void (^)(void (^ _Nonnull)(ATAlertConf * _Nonnull)))update {
-    __weak typeof(self) _self = self;
+    @weakify(self);
     return ^void(void(^block)(ATAlertConf *config)) {
-        __strong typeof(_self) self = _self;
-        if ( !self ) return;
-        if ( block ) block(self.conf);
+        if (!self) return;
+        if (block) block(self.conf);
         ///backgroundView
         self.backgroundView.backgroundColor = self.conf.dimBackgroundColor;
         ///contentView
@@ -381,6 +364,8 @@ static UIViewController *_at_get_top_view_controller() {
     
     if (self.textFields.count > 0) {
         
+        [view endEditing:YES];
+        
         [self.contentView addSubview:self.inputView];
         [self.inputView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(lastAttribute).offset(10);
@@ -457,7 +442,7 @@ static UIViewController *_at_get_top_view_controller() {
     }
     
     [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(lastAttribute);//.offset(self.conf.insets.bottom);
+        make.bottom.equalTo(lastAttribute);
         make.center.equalTo(self.backgroundView).centerOffset(CGPointMake(0, ((self.textFields.count > 0) ? (-216.f/2.f) : 0)));
     }];
     
@@ -618,7 +603,7 @@ static UIViewController *_at_get_top_view_controller() {
 
 - (void)showIn:(UIView *)view completion:(void(^)(BOOL finished))completion {
     
-    NSAssert(self.message.length > 0, @"message could not be nil");
+    //NSAssert(self.message.length > 0, @"message could not be nil");
     NSAssert(self.actions.count > 0, @"could not find any actions");
     
     if (self.preferredStyle == ATAlertStyleAlert) {
