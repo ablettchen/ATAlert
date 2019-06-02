@@ -1,31 +1,26 @@
 //
 //  ATViewController.m
-//  ATAlert
+//  ATAlertView
+//  https://github.com/ablettchen/ATAlertView
 //
-//  Created by ablettchen@gmail.com on 05/30/2019.
-//  Copyright (c) 2019 ablettchen@gmail.com. All rights reserved.
+//  Created by ablett on 2019/5/5.
+//  Copyright (c) 2019 ablett. All rights reserved.
 //
 
 #import "ATViewController.h"
 #import <ATCategories.h>
 #import <Masonry.h>
-#import <ATAlert.h>
-
-#if __has_include(<ATToast/UIView+ATToast.h>)
+#import <ATAlert/ATAlertView.h>
 #import <ATToast/UIView+ATToast.h>
-#else
-#import "UIView+ATToast.h"
-#endif
 
 @interface ATViewController ()<UITableViewDataSource, UITableViewDelegate>
-@property (strong, nonatomic) UITableView *tableView;
-@property (strong, nonatomic) NSMutableArray *datas;
-@end
+    @property (strong, nonatomic) UITableView *tableView;
+    @property (strong, nonatomic) NSMutableArray *datas;
+    @end
 
 @implementation ATViewController
-
-- (void)viewDidLoad
-{
+    
+- (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     self.view.backgroundColor = UIColorHex(0xF5F5F5FF);
@@ -39,7 +34,7 @@
                                       @"Alert - Input", \
                                       @"Sheet - Default"]];
 }
-
+    
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -47,15 +42,15 @@
         make.left.bottom.right.equalTo(self.view);
     }];
 }
-
+    
 - (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
+    {
+        [super didReceiveMemoryWarning];
+        // Dispose of any resources that can be recreated.
+    }
+    
 #pragma mark - setter, getter
-
+    
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -71,15 +66,15 @@
     }
     return _tableView;
 }
-
+    
 #pragma mark - privite
-
+    
 #pragma mark - UITableViewDataSource, UITableViewDelegate
-
+    
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.datas.count;
 }
-
+    
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DemoCell"];
     if (!cell) {
@@ -90,7 +85,7 @@
     if ((indexPath.row % 2) == 0) {cell.backgroundColor = UIColorHex(0x1515151A);}
     return cell;
 }
-
+    
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSString *title = self.datas[indexPath.row];
@@ -105,17 +100,17 @@
         }), ATAlertNormalActionMake(@"Cacel", ^(ATAlertAction * _Nonnull action) {
             NSLog(@"%@", action.title);
         })];
-        [[ATAlert alertWithTitle:title message:message actions:actions] show];
-
+        [[ATAlertView alertWithTitle:title message:message actions:actions] show];
+        
         
     }else if ([title isEqualToString:@"Alert - Confirm"]) {
         
-        [[ATAlert alertWithTitle:title message:@"Confirm Dialog"] show];
+        [[ATAlertView alertWithTitle:title message:@"Confirm Dialog"] show];
         
     }else if ([title isEqualToString:@"Alert - Confirm / Without title"]) {
         
         NSString *message = @"您的班级信息数据已更新完成,请重新刷新列表查看最新数据.";
-        [[ATAlert alertWithTitle:nil message:message] show];
+        [[ATAlertView alertWithTitle:nil message:message] show];
         
     }else if ([title isEqualToString:@"Alert - Link"]) {
         
@@ -128,11 +123,11 @@
         NSArray *links = @[ATAlertLinkMake(@"《用户隐私政策》", ^(ATAlertLink * _Nonnull action) {
             NSLog(@"%@", action.text);
         })];
-        ATAlert *alert = \
-        [ATAlert alertWithPreferredStyle:ATAlertStyleAlert
-                                   title:@"温馨提示"
-                                 message:message
-                                 actions:actions];
+        ATAlertView *alert = \
+        [ATAlertView alertWithPreferredStyle:ATAlertStyleAlert
+                                       title:@"温馨提示"
+                                     message:message
+                                     actions:actions];
         [alert addMessageLinks:links];
         [alert show];
         
@@ -144,11 +139,11 @@
         }), ATAlertHilightedActionMake(@"确定", ^(ATAlertAction * _Nonnull action) {
             NSLog(@"%@", action.title);
         })];
-        ATAlert *alert = \
-        [ATAlert alertWithPreferredStyle:ATAlertStyleAlert
-                                   title:@"提示"
-                                 message:message
-                                 actions:actions];
+        ATAlertView *alert = \
+        [ATAlertView alertWithPreferredStyle:ATAlertStyleAlert
+                                       title:@"提示"
+                                     message:message
+                                     actions:actions];
         [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
             textField.placeholder = @"请输入昵称~";
         }];
@@ -166,14 +161,14 @@
         }), ATAlertDisabledActionMake(@"Disabled", ^(ATAlertAction * _Nonnull action) {
             NSLog(@"%@", action.title);
         })];
-
-        ATAlert *alert = \
-        [ATAlert alertWithPreferredStyle:ATAlertStyleSheet
-                                   title:nil
-                                 message:@""
-                                 actions:actions];
+        
+        ATAlertView  *alert = \
+        [ATAlertView alertWithPreferredStyle:ATAlertStyleSheet
+                                       title:nil
+                                     message:@""
+                                     actions:actions];
         [alert show];
+        
     }
 }
-
-@end
+    @end

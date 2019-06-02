@@ -1,11 +1,14 @@
 //
-//  ATAlert.m
-//  ATAlert
+//  ATAlertView.m
+//  ATAlertView
+//  https://github.com/ablettchen/ATAlertView
 //
-//  Created by ablett on 2019/5/30.
+//  Created by ablett on 2019/5/5.
+//  Copyright (c) 2019 ablett. All rights reserved.
 //
 
-#import "ATAlert.h"
+#import "ATAlertView.h"
+
 #if __has_include(<ATCategories/ATCategories.h>)
 #import <ATCategories/ATCategories.h>
 #else
@@ -57,7 +60,8 @@
 
 @end
 
-@interface ATAlert ()<UIGestureRecognizerDelegate>
+
+@interface ATAlertView ()<UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign, readwrite) enum ATAlertStyle preferredStyle;
 @property (nonatomic, strong, readwrite) NSMutableArray<ATAlertAction *> *actions;
@@ -69,7 +73,6 @@
 @property (nonatomic, strong) NSMutableArray<UIButton *> *buttons;
 
 @property (nonatomic, strong, readonly) UIView *backgroundView;
-@property (nonatomic, strong, readonly) UIView *contentView;
 @property (nonatomic, strong, readonly) UIView *inputView;
 @property (nonatomic, strong, readonly) UIView *actionView;
 
@@ -81,11 +84,10 @@
 
 @end
 
-@implementation ATAlert
+@implementation ATAlertView
 
 @synthesize conf = _conf;
 @synthesize backgroundView = _backgroundView;
-@synthesize contentView = _contentView;
 @synthesize inputView = _inputView;
 @synthesize actionView = _actionView;
 @synthesize sheetTitleView = _sheetTitleView;
@@ -102,6 +104,9 @@
 - (instancetype)init {
     self = [super init];
     if (!self) return nil;
+    
+    self.clipsToBounds = YES;
+    self.alpha = 0.001f;
     
     _actions = [NSMutableArray array];
     _links = [NSMutableArray array];
@@ -136,10 +141,10 @@
         ///backgroundView
         self.backgroundView.backgroundColor = self.conf.dimBackgroundColor;
         ///contentView
-        self.contentView.backgroundColor = (self.preferredStyle == ATAlertStyleAlert) ? self.conf.backgroundColor : self.conf.sheetBackgroundColor;
-        self.contentView.layer.cornerRadius = self.conf.cornerRadius;
-        self.contentView.layer.borderWidth = self.conf.splitWidth;
-        self.contentView.layer.borderColor = self.conf.splitColor.CGColor;
+        self.backgroundColor = (self.preferredStyle == ATAlertStyleAlert) ? self.conf.backgroundColor : self.conf.sheetBackgroundColor;
+        self.layer.cornerRadius = self.conf.cornerRadius;
+        self.layer.borderWidth = self.conf.splitWidth;
+        self.layer.borderColor = self.conf.splitColor.CGColor;
         ///titleLabel
         self.titleLabel.backgroundColor = self.conf.backgroundColor;
         self.titleLabel.font = self.conf.titleFont;
@@ -219,14 +224,6 @@
     return _backgroundView;
 }
 
-- (UIView *)contentView {
-    if (_contentView) return _contentView;
-    _contentView = [UIView new];
-    _contentView.clipsToBounds = YES;
-    _contentView.alpha = 0.001f;
-    return _contentView;
-}
-
 - (UIView *)inputView {
     if (_inputView) return _inputView;
     _inputView = [UIView new];
@@ -291,12 +288,12 @@
         make.edges.equalTo(view);
     }];
     
-    [self.backgroundView addSubview:self.contentView];
-    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.backgroundView addSubview:self];
+    [self mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self.conf.width);
     }];
-    
-    MASViewAttribute *lastAttribute = self.contentView.mas_top;
+
+    MASViewAttribute *lastAttribute = self.mas_top;
     
     CGFloat labelWidth = self.conf.width-self.conf.insets.left-self.conf.insets.right;
     
@@ -311,10 +308,10 @@
         YYTextLayout *textLayout = [YYTextLayout layoutWithContainerSize:CGSizeMake(labelWidth, CGFLOAT_MAX) text:attributedText];
         self.titleLabel.textLayout = textLayout;
         
-        [self.contentView addSubview:self.titleLabel];
+        [self addSubview:self.titleLabel];
         [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(lastAttribute).insets(self.conf.insets);
-            make.left.right.equalTo(self.contentView).insets(self.conf.insets);
+            make.left.right.equalTo(self).insets(self.conf.insets);
             make.height.equalTo(@(textLayout.textBoundingSize.height));
         }];
         self.titleLabel.attributedText = attributedText;
@@ -334,10 +331,10 @@
         attributedText.yy_alignment = (self.conf.messageWildAlignmentCenter) ? NSTextAlignmentCenter : ((textLayout.lines.count > 1) ? NSTextAlignmentLeft : NSTextAlignmentCenter);
         self.messageLabel.textLayout = textLayout;
         
-        [self.contentView addSubview:self.messageLabel];
+        [self addSubview:self.messageLabel];
         [self.messageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(lastAttribute).offset(titleIsNil?self.conf.insets.top:self.conf.messageToTitleInset);
-            make.left.right.equalTo(self.contentView).insets(self.conf.insets);
+            make.left.right.equalTo(self).insets(self.conf.insets);
             make.height.equalTo(@(textLayout.textBoundingSize.height));
         }];
         
@@ -367,10 +364,10 @@
         
         [view endEditing:YES];
         
-        [self.contentView addSubview:self.inputView];
+        [self addSubview:self.inputView];
         [self.inputView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(lastAttribute).offset(10);
-            make.left.right.equalTo(self.contentView);
+            make.left.right.equalTo(self);
         }];
         
         MASViewAttribute *lastUnputAttribute = lastAttribute;
@@ -395,10 +392,10 @@
     
     if (self.buttons.count > 0) {
         
-        [self.contentView addSubview:self.actionView];
+        [self addSubview:self.actionView];
         [self.actionView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(lastAttribute).offset(self.conf.insets.top);
-            make.left.right.equalTo(self.contentView);
+            make.left.right.equalTo(self);
         }];
         
         __block UIButton *firstButton = nil;
@@ -442,12 +439,14 @@
         lastAttribute = self.actionView.mas_bottom;
     }
     
-    [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(lastAttribute);
         make.center.equalTo(self.backgroundView).centerOffset(CGPointMake(0, ((self.textFields.count > 0) ? (-216.f/2.f) : 0)));
     }];
     
-    self.contentView.layer.transform = CATransform3DMakeScale(1.2f, 1.2f, 1.0f);
+    [self bringSubviewToFront:view];
+    
+    self.layer.transform = CATransform3DMakeScale(1.2f, 1.2f, 1.0f);
     @weakify(self);
     [UIView animateWithDuration:0.3
                           delay:0
@@ -455,8 +454,8 @@
                      animations:^{
                          @strongify(self);
                          self.backgroundView.alpha = 1.0f;
-                         self.contentView.layer.transform = CATransform3DIdentity;
-                         self.contentView.alpha = 1.0f;
+                         self.layer.transform = CATransform3DIdentity;
+                         self.alpha = 1.0f;
                      }
                      completion:completion];
 }
@@ -468,20 +467,20 @@
         make.edges.equalTo(view);
     }];
     
-    [self.backgroundView addSubview:self.contentView];
-    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.backgroundView addSubview:self];
+    [self mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(SCREEN_WIDTH);
     }];
     
-    MASViewAttribute *lastAttribute = self.contentView.mas_top;
+    MASViewAttribute *lastAttribute = self.mas_top;
     
     CGFloat labelWidth = SCREEN_WIDTH-self.conf.insets.left-self.conf.insets.right;
     
     if (self.message.stringByTrim.length > 0) {
         
-        [self.contentView addSubview:self.sheetTitleView];
+        [self addSubview:self.sheetTitleView];
         [self.sheetTitleView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.left.right.equalTo(self.contentView);
+            make.top.left.right.equalTo(self);
         }];
         
         NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:self.message];
@@ -495,7 +494,7 @@
         
         [self.sheetTitleView addSubview:self.messageLabel];
         [self.messageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.left.right.equalTo(self.contentView).insets(self.conf.insets);
+            make.top.left.right.equalTo(self).insets(self.conf.insets);
             make.height.mas_equalTo(textLayout.textBoundingSize.height);
         }];
         
@@ -517,7 +516,7 @@
         }
         
         self.messageLabel.attributedText = attributedText;
-
+        
         [self.sheetTitleView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.messageLabel).offset(self.conf.insets.bottom);
         }];
@@ -527,10 +526,10 @@
     
     if (self.buttons.count > 0) {
         
-        [self.contentView addSubview:self.actionView];
+        [self addSubview:self.actionView];
         [self.actionView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(lastAttribute);
-            make.left.right.equalTo(self.contentView);
+            make.left.right.equalTo(self);
         }];
         
         __block UIButton *firstButton = nil;
@@ -552,10 +551,10 @@
             }];
         }
         [lastButton mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(self.actionView.mas_bottom).offset(-self.conf.splitWidth);
+            make.bottom.equalTo(self.actionView.mas_bottom);//.offset(-self.conf.splitWidth);
         }];
         
-        [self.contentView addSubview:self.sheetCancelBtn];
+        [self addSubview:self.sheetCancelBtn];
         [self.sheetCancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.actionView);
             make.height.mas_equalTo(self.conf.actionHeight);
@@ -566,38 +565,38 @@
         
         UIView *extraView = ({
             UIView *view = [UIView new];
-            [self.contentView addSubview:view];
+            [self addSubview:view];
             [view mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.mas_equalTo(self.sheetCancelBtn.mas_bottom);
-                make.left.right.mas_equalTo(self.contentView);
+                make.left.right.mas_equalTo(self);
                 make.height.mas_equalTo(height);
             }];
             
             view.backgroundColor = self.conf.backgroundColor;
             view;
         });
-
+        
         lastAttribute = extraView.mas_bottom;
         
-        [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+        [self mas_updateConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(lastAttribute);
         }];
     }
     
-    [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.backgroundView);
         make.bottom.equalTo(self.backgroundView).offset(self.backgroundView.superview.at_height);
     }];
     [self.backgroundView layoutIfNeeded];
     
-    self.contentView.alpha = 1.0f;
-    
+    self.alpha = 1.0f;
+    [self bringSubviewToFront:view];
     [UIView animateWithDuration:0.3
                           delay:0
                         options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          self.backgroundView.alpha = 1.0f;
-                         [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+                         [self mas_updateConstraints:^(MASConstraintMaker *make) {
                              make.bottom.equalTo(self.backgroundView).offset(0);
                          }];
                          [self.backgroundView layoutIfNeeded];
@@ -628,11 +627,11 @@
                         options: UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          self.backgroundView.alpha = 0.001f;
-                         self.contentView.alpha = 0.001f;
+                         self.alpha = 0.001f;
                      }
                      completion:^(BOOL finished) {
                          if (finished) {
-                             [self.contentView removeFromSuperview], _contentView = nil;
+                             [self removeFromSuperview],
                              [self.backgroundView removeFromSuperview], _backgroundView = nil;
                          }
                          if (completion) {completion(finished);}
@@ -645,14 +644,14 @@
                         options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          self.backgroundView.alpha = 0.001f;
-                         [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+                         [self mas_updateConstraints:^(MASConstraintMaker *make) {
                              make.bottom.equalTo(self.backgroundView.mas_bottom).offset(self.backgroundView.superview.at_height);
                          }];
                          [self.backgroundView layoutIfNeeded];
                      }
                      completion:^(BOOL finished) {
                          if (finished) {
-                             [self.contentView removeFromSuperview], _contentView = nil;
+                             [self removeFromSuperview],
                              [self.backgroundView removeFromSuperview], _backgroundView = nil;
                          }
                          if (completion) {completion(finished);}
@@ -680,7 +679,7 @@
                                 message:(nonnull NSString *)message
                                 actions:(nonnull NSArray *)actions {
     
-    ATAlert *alert = [ATAlert new];
+    ATAlertView *alert = [ATAlertView new];
     alert.preferredStyle = style;
     alert.title = title;
     alert.message = message;
@@ -732,7 +731,7 @@
 - (void)reset {
     
     _touchWildToHide    = NO;
-
+    
     _width              = 275.f;
     _insets             = UIEdgeInsetsMake(25, 25, 25, 25);
     _cornerRadius       = 10.0f;

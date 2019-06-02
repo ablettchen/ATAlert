@@ -1,11 +1,12 @@
 //
-//  ATAlert.h
-//  ATAlert
+//  ATAlertView.h
+//  ATAlertView
+//  https://github.com/ablettchen/ATAlertView
 //
-//  Created by ablett on 2019/5/30.
+//  Created by ablett on 2019/5/5.
+//  Copyright (c) 2019 ablett. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -49,7 +50,8 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 };
 
 @class ATAlertConf;
-@interface ATAlert : NSObject
+
+@interface ATAlertView : UIView
 
 @property (nonatomic, assign, readonly) enum ATAlertStyle preferredStyle;
 @property (nullable, nonatomic, copy) NSString *title;
@@ -113,5 +115,6 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 
 NS_ASSUME_NONNULL_END
 
-#import "ATAlert+Make.h"
-#import "UIView+ATAlert.h"
+#import "ATAlertView+Make.h"
+#import "UIView+ATAlertView.h"
+

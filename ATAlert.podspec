@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     s.name                    = 'ATAlert'
     s.version                 = '0.1.0'
-    s.summary                 = 'toast'
+    s.summary                 = 'Alert view'
     s.homepage                = 'https://github.com/ablettchen/ATAlert'
     s.license                 = { :type => 'MIT', :file => 'LICENSE' }
     s.author                  = { 'ablett' => 'ablettchen@gmail.com' }
@@ -17,7 +17,6 @@ Pod::Spec.new do |s|
     s.social_media_url        = 'https://twitter.com/ablettchen'
     s.ios.deployment_target   = '8.0'
     s.source_files            = 'ATAlert/**/*.{h,m}'
-    # s.resource                = 'ATAlert/ATToast.bundle'
     s.requires_arc            = true
     
     s.dependency 'ATCategories'

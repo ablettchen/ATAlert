@@ -1,15 +1,17 @@
 //
-//  ATAlert+Make.h
-//  ATAlert
+//  ATAlertView+Make.h
+//  ATAlertView
+//  https://github.com/ablettchen/ATAlertView
 //
-//  Created by ablett on 2019/5/30.
+//  Created by ablett on 2019/5/5.
+//  Copyright (c) 2019 ablett. All rights reserved.
 //
 
-#import <ATAlert/ATAlert.h>
+#import <ATAlert/ATAlertView.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ATAlert (Make)
+@interface ATAlertView (Make)
 
 + (instancetype)alertWithTitle:(nullable NSString *)title
                        message:(nonnull NSString *)message;
@@ -28,10 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_INLINE ATAlert *ATAlertMake(NSString *__nullable title,
+NS_INLINE ATAlertView *ATAlertMake(NSString *__nullable title,
                                NSString *__nonnull message,
                                NSArray <ATAlertLink *>*__nonnull actions) {
-    return [ATAlert alertWithTitle:title message:message actions:actions];
+    return [ATAlertView alertWithTitle:title message:message actions:actions];
 }
 
 NS_INLINE ATAlertAction *ATAlertActionMake(NSString *title,
@@ -54,6 +56,5 @@ NS_INLINE ATAlertAction *ATAlertDisabledActionMake(NSString *title,
                                                    void(^__nullable handler)(ATAlertAction *action)) {
     return ATAlertActionMake(title, ATAlertActionStyleDisabled, handler);
 }
-
 
 NS_ASSUME_NONNULL_END
