@@ -82,6 +82,8 @@
 @property (nonatomic, strong, readonly) YYLabel *titleLabel;
 @property (nonatomic, strong, readonly) YYLabel *messageLabel;
 
+@property (assign, nonatomic) BOOL showing;
+
 @end
 
 @implementation ATAlertView
@@ -114,6 +116,7 @@
     
     _buttons = [NSMutableArray array];
     
+    self.showing = NO;
     self.preferredStyle = ATAlertStyleAlert;
     self.update(^(ATAlertConf * _Nonnull conf) {});
     
@@ -607,6 +610,9 @@
 
 - (void)showIn:(__weak UIView *)view completion:(void(^)(BOOL finished))completion {
     
+    if (self.showing) {return;}
+    self.showing = YES;
+    
     //NSAssert(self.message.length > 0, @"message could not be nil");
     NSAssert(self.actions.count > 0, @"could not find any actions");
     
@@ -659,6 +665,10 @@
 }
 
 - (void)hide:(void(^ __nullable)(BOOL finished))completion {
+    
+    if (self.showing == NO) {return;}
+    self.showing = NO;
+    
     if (self.preferredStyle == ATAlertStyleAlert) {
         [self hideAlert:completion];
     }else if (self.preferredStyle == ATAlertStyleSheet) {

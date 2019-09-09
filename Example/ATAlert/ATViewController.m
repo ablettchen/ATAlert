@@ -14,9 +14,9 @@
 #import <ATToast/UIView+ATToast.h>
 
 @interface ATViewController ()<UITableViewDataSource, UITableViewDelegate>
-    @property (strong, nonatomic) UITableView *tableView;
-    @property (strong, nonatomic) NSMutableArray *datas;
-    @end
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) NSMutableArray *datas;
+@end
 
 @implementation ATViewController
     
