@@ -52,7 +52,6 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 @class ATAlertConf;
 
 @interface ATAlertView : UIView
-
 @property (nonatomic, assign, readonly) enum ATAlertStyle preferredStyle;
 @property (nullable, nonatomic, copy) NSString *title;
 @property (nonnull, nonatomic, copy) NSString *message;
@@ -63,6 +62,8 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 
 @property (nullable, nonatomic, copy) void(^didShow)(BOOL finished);
 @property (nullable, nonatomic, copy) void(^didHide)(BOOL finished);
+
+@property (nonatomic, assign, readonly) BOOL isShowing;
 
 + (instancetype)alertWithPreferredStyle:(enum ATAlertStyle)style
                                   title:(nullable NSString *)title

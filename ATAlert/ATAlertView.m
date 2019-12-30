@@ -63,6 +63,8 @@
 
 @interface ATAlertView ()<UIGestureRecognizerDelegate>
 
+@property (nonatomic, assign, readwrite) BOOL isShowing;
+
 @property (nonatomic, assign, readwrite) enum ATAlertStyle preferredStyle;
 @property (nonatomic, strong, readwrite) NSMutableArray<ATAlertAction *> *actions;
 @property (nonatomic, strong, readwrite) NSMutableArray<ATAlertLink *> *links;
@@ -108,6 +110,7 @@
     self.clipsToBounds = YES;
     self.alpha = 0.001f;
     
+    _isShowing = NO;
     _actions = [NSMutableArray array];
     _links = [NSMutableArray array];
     _textFields = [NSMutableArray array];
@@ -292,7 +295,7 @@
     [self mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self.conf.width);
     }];
-
+    
     MASViewAttribute *lastAttribute = self.mas_top;
     
     CGFloat labelWidth = self.conf.width-self.conf.insets.left-self.conf.insets.right;
@@ -346,13 +349,13 @@
                                                color:obj.color?:self.conf.linkColor
                                      backgroundColor:obj.backgroundColor?:self.conf.linkBackgroundColor
                                            tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
-                                               if (obj.handler) {
-                                                   @strongify(self);
-                                                   [self hide:^(BOOL finished) {
-                                                       if (finished) obj.handler(obj);
-                                                   }];
-                                               }
-                                           }];
+                if (obj.handler) {
+                    @strongify(self);
+                    [self hide:^(BOOL finished) {
+                        if (finished) obj.handler(obj);
+                    }];
+                }
+            }];
         }
         
         self.messageLabel.attributedText = attributedText;
@@ -452,12 +455,12 @@
                           delay:0
                         options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         @strongify(self);
-                         self.backgroundView.alpha = 1.0f;
-                         self.layer.transform = CATransform3DIdentity;
-                         self.alpha = 1.0f;
-                     }
-                     completion:completion];
+        @strongify(self);
+        self.backgroundView.alpha = 1.0f;
+        self.layer.transform = CATransform3DIdentity;
+        self.alpha = 1.0f;
+        self.isShowing = YES;
+    } completion:completion];
 }
 
 - (void)showSheetIn:(__weak UIView *)view completion:(void(^)(BOOL finished))completion {
@@ -506,13 +509,13 @@
                                                color:obj.color?:self.conf.linkColor
                                      backgroundColor:obj.backgroundColor?:self.conf.linkBackgroundColor
                                            tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
-                                               @strongify(self);
-                                               if (obj.handler) {
-                                                   [self hide:^(BOOL finished) {
-                                                       if (finished) obj.handler(obj);
-                                                   }];
-                                               }
-                                           }];
+                @strongify(self);
+                if (obj.handler) {
+                    [self hide:^(BOOL finished) {
+                        if (finished) obj.handler(obj);
+                    }];
+                }
+            }];
         }
         
         self.messageLabel.attributedText = attributedText;
@@ -595,14 +598,13 @@
                           delay:0
                         options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         self.backgroundView.alpha = 1.0f;
-                         [self mas_updateConstraints:^(MASConstraintMaker *make) {
-                             make.bottom.equalTo(self.backgroundView).offset(0);
-                         }];
-                         [self.backgroundView layoutIfNeeded];
-                     }
-                     completion:completion];
-    
+        self.backgroundView.alpha = 1.0f;
+        [self mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.backgroundView).offset(0);
+        }];
+        [self.backgroundView layoutIfNeeded];
+        self.isShowing = YES;
+    } completion:completion];
 }
 
 - (void)showIn:(__weak UIView *)view completion:(void(^)(BOOL finished))completion {
@@ -626,16 +628,16 @@
                           delay:0
                         options: UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         self.backgroundView.alpha = 0.001f;
-                         self.alpha = 0.001f;
-                     }
-                     completion:^(BOOL finished) {
-                         if (finished) {
-                             [self removeFromSuperview],
-                             [self.backgroundView removeFromSuperview], _backgroundView = nil;
-                         }
-                         if (completion) {completion(finished);}
-                     }];
+        self.backgroundView.alpha = 0.001f;
+        self.alpha = 0.001f;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [self removeFromSuperview],
+            [self.backgroundView removeFromSuperview], _backgroundView = nil;
+            self.isShowing = NO;
+        }
+        if (completion) {completion(finished);}
+    }];
 }
 
 - (void)hideSheet:(void(^ __nullable)(BOOL finished))completion {
@@ -643,19 +645,19 @@
                           delay:0
                         options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         self.backgroundView.alpha = 0.001f;
-                         [self mas_updateConstraints:^(MASConstraintMaker *make) {
-                             make.bottom.equalTo(self.backgroundView.mas_bottom).offset(self.backgroundView.superview.at_height);
-                         }];
-                         [self.backgroundView layoutIfNeeded];
-                     }
-                     completion:^(BOOL finished) {
-                         if (finished) {
-                             [self removeFromSuperview],
-                             [self.backgroundView removeFromSuperview], _backgroundView = nil;
-                         }
-                         if (completion) {completion(finished);}
-                     }];
+        self.backgroundView.alpha = 0.001f;
+        [self mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.backgroundView.mas_bottom).offset(self.backgroundView.superview.at_height);
+        }];
+        [self.backgroundView layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [self removeFromSuperview],
+            [self.backgroundView removeFromSuperview], _backgroundView = nil;
+            self.isShowing = NO;
+        }
+        if (completion) {completion(finished);}
+    }];
 }
 
 - (void)hide:(void(^ __nullable)(BOOL finished))completion {

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name                    = 'ATAlert'
-    s.version                 = '0.1.2'
+    s.version                 = '0.1.3'
     s.summary                 = 'Alert view'
     s.homepage                = 'https://github.com/ablettchen/ATAlert'
     s.license                 = { :type => 'MIT', :file => 'LICENSE' }
