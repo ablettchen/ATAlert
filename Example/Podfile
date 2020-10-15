@@ -1,15 +1,11 @@
-source 'https://github.com/CocoaPods/Specs.git'
+#source 'https://github.com/CocoaPods/Specs.git'
 # use_frameworks!
 inhibit_all_warnings!
-
-platform :ios, '8.0'
+platform :ios, '9.0'
 
 target 'ATAlert_Example' do
-  pod 'ATAlert', :path => '../'
-  target 'ATAlert_Tests' do
-    inherit! :search_paths
-  end
   
+  pod 'ATAlert', :path => '../'
   pod 'ATToast'
   
 end

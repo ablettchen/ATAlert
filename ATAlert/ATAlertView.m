@@ -376,7 +376,6 @@
         MASViewAttribute *lastUnputAttribute = lastAttribute;
         
         for (UITextField *obj in self.textFields) {
-            NSUInteger idx = [self.textFields indexOfObject:obj];
             [self.inputView addSubview:obj];
             [obj mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(lastUnputAttribute).offset(10);
