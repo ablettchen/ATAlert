@@ -631,9 +631,10 @@
         self.alpha = 0.001f;
     } completion:^(BOOL finished) {
         if (finished) {
-            [self removeFromSuperview],
-            [self.backgroundView removeFromSuperview], _backgroundView = nil;
-            self.isShowing = NO;
+            [self removeFromSuperview];
+            [self->_backgroundView removeFromSuperview];
+            self->_backgroundView = nil;
+            self->_isShowing = NO;
         }
         if (completion) {completion(finished);}
     }];
@@ -651,9 +652,10 @@
         [self.backgroundView layoutIfNeeded];
     } completion:^(BOOL finished) {
         if (finished) {
-            [self removeFromSuperview],
-            [self.backgroundView removeFromSuperview], _backgroundView = nil;
-            self.isShowing = NO;
+            [self removeFromSuperview];
+            [self->_backgroundView removeFromSuperview];
+            self->_backgroundView = nil;
+            self->_isShowing = NO;
         }
         if (completion) {completion(finished);}
     }];
