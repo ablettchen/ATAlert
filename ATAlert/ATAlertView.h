@@ -22,9 +22,7 @@ typedef NS_ENUM(NSUInteger, ATAlertActionStyle) {
 @property (nonnull, copy, nonatomic) NSString *title;
 @property (assign, nonatomic) enum ATAlertActionStyle style;
 
-+ (instancetype)actonWithTitle:(nonnull NSString *)title
-                         style:(enum ATAlertActionStyle)style
-                       handler:(void(^__nullable)(ATAlertAction *action))handler;
++ (instancetype)actonWithTitle:(nonnull NSString *)title style:(enum ATAlertActionStyle)style handler:(void(^__nullable)(ATAlertAction *action))handler;
 
 @end
 
@@ -34,13 +32,11 @@ typedef NS_ENUM(NSUInteger, ATAlertActionStyle) {
 @property (nullable, strong, nonatomic) UIColor *color;
 @property (nullable, strong, nonatomic) UIColor *backgroundColor;
 
-+ (instancetype)linkWithText:(nonnull NSString *)text
-                     handler:(void(^__nullable)(ATAlertLink *action))handler;
++ (instancetype)linkWithText:(nonnull NSString *)text handler:(void(^__nullable)(ATAlertLink *action))handler;
 
 @end
 
-NS_INLINE ATAlertLink *ATAlertLinkMake(NSString *text,
-                                       void(^__nullable handler)(ATAlertLink *action)) {
+NS_INLINE ATAlertLink *ATAlertLinkMake(NSString *text, void(^__nullable handler)(ATAlertLink *action)) {
     return [ATAlertLink linkWithText:text handler:handler];
 }
 
@@ -65,10 +61,7 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 
 @property (nonatomic, assign, readonly) BOOL isShowing;
 
-+ (instancetype)alertWithPreferredStyle:(enum ATAlertStyle)style
-                                  title:(nullable NSString *)title
-                                message:(nonnull NSString *)message
-                                actions:(nonnull NSArray *)actions;
++ (instancetype)alertWithPreferredStyle:(enum ATAlertStyle)style title:(nullable NSString *)title message:(nonnull NSString *)message actions:(nonnull NSArray *)actions;
 
 - (void)addTextFieldWithConfigurationHandler:(void (^ __nullable)(UITextField *textField))configurationHandler;
 - (void)addMessageLinks:(NSArray <ATAlertLink *>*__nonnull)links;
@@ -91,8 +84,7 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 @property (nonatomic, strong) UIColor *titleColor;              ///< default is 0x333333FF.
 @property (nonatomic, assign) CGFloat messageToTitleInset;      ///< Default is 10.
 @property (nonatomic, assign) CGFloat lineSpace;                ///< default is 7.
-/** 默认NO, 即：一行为：NSTextAlignmentCenter，两行为：NSTextAlignmentLeft，若为YES, 即 NSTextAlignmentCenter */
-@property (nonatomic, assign) BOOL messageWildAlignmentCenter;
+@property (nonatomic, assign) BOOL messageWildAlignmentCenter;  /** 默认NO, 即：一行为：NSTextAlignmentCenter，两行为：NSTextAlignmentLeft，若为YES, 即 NSTextAlignmentCenter */
 @property (nonatomic, strong) UIFont *messageFont;              ///< default is systemFont(14).
 @property (nonatomic, strong) UIFont *messageOnlyFont;          ///< default is systemFont(14).
 @property (nonatomic, strong) UIColor *messageColor;            ///< default is 0x333333FF.

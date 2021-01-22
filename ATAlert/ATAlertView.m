@@ -33,9 +33,7 @@
 
 @implementation ATAlertAction
 
-+ (instancetype)actonWithTitle:(nonnull NSString *)title
-                         style:(enum ATAlertActionStyle)style
-                       handler:(void(^__nullable)(ATAlertAction *action))handler {
++ (instancetype)actonWithTitle:(nonnull NSString *)title style:(enum ATAlertActionStyle)style handler:(void(^__nullable)(ATAlertAction *action))handler {
     ATAlertAction *action = [ATAlertAction new];
     action.title = title;
     action.style = style;
@@ -50,8 +48,7 @@
 @end
 @implementation ATAlertLink
 
-+ (instancetype)linkWithText:(nonnull NSString *)text
-                     handler:(void(^__nullable)(ATAlertLink *action))handler {
++ (instancetype)linkWithText:(nonnull NSString *)text handler:(void(^__nullable)(ATAlertLink *action))handler {
     ATAlertLink *link = [ATAlertLink new];
     link.text = text;
     link.handler = handler;
@@ -761,7 +758,7 @@
     _actionFont         = [UIFont systemFontOfSize:17];
     _actionBoldFont      = [UIFont boldSystemFontOfSize:17];
     _actionColor        = UIColorHex(0x333333FF);
-    _actionHightedColor = UIColorHex(0xEE873AFF);
+    _actionHightedColor = UIColorHex(0x00A5FFFF);
     _actionPressBGColor = UIColorHex(0xF5F5F5FF);
     
     _actionHeight       = 50.f;
