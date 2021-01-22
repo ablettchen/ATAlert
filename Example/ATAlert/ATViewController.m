@@ -164,8 +164,8 @@
         
         ATAlertView  *alert = \
         [ATAlertView alertWithPreferredStyle:ATAlertStyleSheet
-                                       title:nil
-                                     message:@""
+                                       title:@""
+                                     message:@"请选择"
                                      actions:actions];
         [alert show];
         

@@ -6,4 +6,6 @@ target 'ATAlert_Example' do
   pod 'ATAlert', :path => '../'
   pod 'ATToast'
   
+  pod 'LookinServer', :configurations => ['Debug']
+  
 end

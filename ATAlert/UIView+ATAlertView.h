@@ -14,6 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 @class ATAlertView;
 @interface UIView (ATAlertView)
 - (void)showAlert:(ATAlertView *)alert;
+
+- (void)alert_filletedCornerWithRadii:(CGSize)cornerRadii roundingCorners:(UIRectCorner)roundingCorners;
+
 @end
 
 NS_ASSUME_NONNULL_END

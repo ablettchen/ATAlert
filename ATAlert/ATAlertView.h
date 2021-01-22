@@ -80,6 +80,7 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 @property (nonatomic, strong) UIColor *dimBackgroundColor;      ///< default is 0x0000007F
 @property (nonatomic, strong) UIColor *backgroundColor;         ///< default is 0xFFFFFFFF.
 @property (nonatomic, strong) UIColor *sheetBackgroundColor;    ///< default is 0xE7E7E7FF.
+@property (nonatomic, assign) UIEdgeInsets sheetContentInsets;  ///< 边距
 @property (nonatomic, strong) UIFont *titleFont;                ///< default is systemFont(18).
 @property (nonatomic, strong) UIColor *titleColor;              ///< default is 0x333333FF.
 @property (nonatomic, assign) CGFloat messageToTitleInset;      ///< Default is 10.

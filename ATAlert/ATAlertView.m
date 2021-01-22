@@ -127,8 +127,14 @@
     self.conf.touchWildToHide = preferredStyle == ATAlertStyleSheet ? : NO;
     if (self.preferredStyle == ATAlertStyleSheet) {
         self.conf.insets = UIEdgeInsetsMake(15, 15, 15, 15);
-        self.conf.cornerRadius = 0.f;
+        self.conf.cornerRadius = self.conf.cornerRadius;
+        self.sheetCancelBtn.layer.cornerRadius = self.conf.cornerRadius;
         self.conf.messageColor = UIColorHex(0x666666FF);
+        
+        self.backgroundColor = [UIColor clearColor];
+        
+    }else {
+        self.backgroundColor = self.conf.backgroundColor;
     }
 }
 
@@ -138,13 +144,20 @@
         @strongify(self);
         if (!self) return;
         if (block) block(self.conf);
-        ///backgroundView
+
         self.backgroundView.backgroundColor = self.conf.dimBackgroundColor;
-        ///contentView
-        self.backgroundColor = (self.preferredStyle == ATAlertStyleAlert) ? self.conf.backgroundColor : self.conf.sheetBackgroundColor;
         self.layer.cornerRadius = self.conf.cornerRadius;
-        self.layer.borderWidth = self.conf.splitWidth;
-        self.layer.borderColor = self.conf.splitColor.CGColor;
+        
+        if (self.preferredStyle == ATAlertStyleAlert) {
+            self.backgroundColor = self.conf.backgroundColor;
+            self.layer.borderWidth = self.conf.splitWidth;
+            self.layer.borderColor = self.conf.splitColor.CGColor;
+        }else {
+            self.backgroundColor = [UIColor clearColor];
+            self.layer.borderWidth = 0.0;
+            self.layer.borderColor = [UIColor clearColor].CGColor;
+        }
+
         ///titleLabel
         self.titleLabel.backgroundColor = self.conf.backgroundColor;
         self.titleLabel.font = self.conf.titleFont;
@@ -246,10 +259,11 @@
     if (_sheetCancelBtn) return _sheetCancelBtn;
     _sheetCancelBtn = [UIButton buttonWithTarget:self action:@selector(hide)];
     [_sheetCancelBtn setTitle:self.conf.actionCancelText forState:UIControlStateNormal];
-    [_sheetCancelBtn setTitleColor:self.conf.actionColor forState:UIControlStateNormal];
+    [_sheetCancelBtn setTitleColor:self.conf.actionHightedColor forState:UIControlStateNormal];
     [_sheetCancelBtn setBackgroundImage:[UIImage imageWithColor:self.conf.backgroundColor] forState:UIControlStateNormal];
     [_sheetCancelBtn setBackgroundImage:[UIImage imageWithColor:self.conf.actionPressBGColor] forState:UIControlStateHighlighted];
     [_sheetCancelBtn.titleLabel setFont:self.conf.actionFont];
+    _sheetCancelBtn.layer.masksToBounds = true;
     return _sheetCancelBtn;
 }
 
@@ -468,7 +482,7 @@
     
     [self.backgroundView addSubview:self];
     [self mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(SCREEN_WIDTH);
+        make.width.mas_equalTo(SCREEN_WIDTH - self.conf.sheetContentInsets.left - self.conf.sheetContentInsets.right);
     }];
     
     MASViewAttribute *lastAttribute = self.mas_top;
@@ -549,9 +563,13 @@
                 lastButton = obj;
             }];
         }
+        
         [lastButton mas_updateConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.actionView.mas_bottom);//.offset(-self.conf.splitWidth);
         }];
+        
+        [self.actionView layoutIfNeeded];
+        [self.actionView alert_filletedCornerWithRadii:CGSizeMake(self.conf.cornerRadius, self.conf.cornerRadius) roundingCorners: UIRectCornerBottomLeft | UIRectCornerBottomRight];
         
         [self addSubview:self.sheetCancelBtn];
         [self.sheetCancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -560,7 +578,7 @@
             make.top.equalTo(self.actionView.mas_bottom).offset(8);
         }];
         
-        CGFloat height = IS_IPHONE_X ? 33 : 0;
+        CGFloat height = IS_IPHONE_X ? (34 + self.conf.sheetContentInsets.bottom) : self.conf.sheetContentInsets.bottom;
         
         UIView *extraView = ({
             UIView *view = [UIView new];
@@ -571,7 +589,7 @@
                 make.height.mas_equalTo(height);
             }];
             
-            view.backgroundColor = self.conf.backgroundColor;
+            view.backgroundColor = [UIColor clearColor];
             view;
         });
         
@@ -607,7 +625,6 @@
     if (self.superview != nil) {return;}
     //NSAssert(self.message.length > 0, @"message could not be nil");
     NSAssert(self.actions.count > 0, @"could not find any actions");
-    
     if (self.preferredStyle == ATAlertStyleAlert) {
         [self showAlertIn:view completion:completion];
     }else if (self.preferredStyle == ATAlertStyleSheet) {
@@ -739,7 +756,7 @@
     
     _dimBackgroundColor = UIColorHex(0x0000007F);
     _backgroundColor    = UIColorHex(0xFFFFFFFF);
-    _sheetBackgroundColor = UIColorHex(0xE7E7E7FF);
+    _sheetContentInsets = UIEdgeInsetsMake(0, 8, 8, 8);
     
     _titleFont          = [UIFont boldSystemFontOfSize:18];
     _titleColor         = UIColorHex(0x333333FF);
@@ -772,3 +789,4 @@
 }
 
 @end
+
