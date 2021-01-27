@@ -199,7 +199,7 @@
             [button setBackgroundImage:[UIImage imageWithColor:self.conf.actionPressBGColor] forState:UIControlStateHighlighted];
             button.layer.borderWidth = self.conf.splitWidth;
             button.layer.borderColor = self.conf.splitColor.CGColor;
-            [button.titleLabel setFont:((i != 0) && (i == (self.actions.count-1)) && (self.preferredStyle == ATAlertStyleAlert))?self.conf.actionBoldFont:self.conf.actionFont];
+            [button.titleLabel setFont:((i != 0) && (i == (self.actions.count-1)) && (self.preferredStyle == ATAlertStyleAlert)) ? self.conf.actionBoldFont : self.conf.actionFont];
             [button setTag:i];
             [self.buttons addObject:button];
         }
@@ -773,7 +773,7 @@
     _linkBackgroundColor = UIColorHex(0xF0FFFFFF);
     
     _actionFont         = [UIFont systemFontOfSize:17];
-    _actionBoldFont      = [UIFont boldSystemFontOfSize:17];
+    _actionBoldFont     = [UIFont systemFontOfSize:17];
     _actionColor        = UIColorHex(0x333333FF);
     _actionHightedColor = UIColorHex(0x00A5FFFF);
     _actionPressBGColor = UIColorHex(0xF5F5F5FF);
