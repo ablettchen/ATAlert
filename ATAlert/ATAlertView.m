@@ -166,6 +166,11 @@
         
         self.sheetTitleView.backgroundColor = self.conf.backgroundColor;
         self.sheetCancelBtn.backgroundColor = self.conf.backgroundColor;
+        [self.sheetCancelBtn setTitle:self.conf.actionCancelText forState:UIControlStateNormal];
+        [self.sheetCancelBtn setTitleColor:self.conf.sheetActionCancelColor forState:UIControlStateNormal];
+        [self.sheetCancelBtn setBackgroundImage:[UIImage imageWithColor:self.conf.backgroundColor] forState:UIControlStateNormal];
+        [self.sheetCancelBtn setBackgroundImage:[UIImage imageWithColor:self.conf.actionPressBGColor] forState:UIControlStateHighlighted];
+        [self.sheetCancelBtn.titleLabel setFont:self.conf.actionFont];
         
         ///messageLabel
         self.messageLabel.backgroundColor = self.conf.backgroundColor;
@@ -199,7 +204,13 @@
             [button setBackgroundImage:[UIImage imageWithColor:self.conf.actionPressBGColor] forState:UIControlStateHighlighted];
             button.layer.borderWidth = self.conf.splitWidth;
             button.layer.borderColor = self.conf.splitColor.CGColor;
-            [button.titleLabel setFont:((i != 0) && (i == (self.actions.count-1)) && (self.preferredStyle == ATAlertStyleAlert)) ? self.conf.actionBoldFont : self.conf.actionFont];
+            
+            if (self.preferredStyle == ATAlertStyleAlert) {
+                [button.titleLabel setFont:((i != 0) && (i == (self.actions.count-1)) && (self.preferredStyle == ATAlertStyleAlert)) ? self.conf.actionBoldFont : self.conf.actionFont];
+            }else if (self.preferredStyle == ATAlertStyleSheet) {
+                [button.titleLabel setFont:self.conf.sheetActionFont];
+            }
+            
             [button setTag:i];
             [self.buttons addObject:button];
         }
@@ -259,7 +270,7 @@
     if (_sheetCancelBtn) return _sheetCancelBtn;
     _sheetCancelBtn = [UIButton buttonWithTarget:self action:@selector(hide)];
     [_sheetCancelBtn setTitle:self.conf.actionCancelText forState:UIControlStateNormal];
-    [_sheetCancelBtn setTitleColor:self.conf.actionHightedColor forState:UIControlStateNormal];
+    [_sheetCancelBtn setTitleColor:self.conf.sheetActionCancelColor forState:UIControlStateNormal];
     [_sheetCancelBtn setBackgroundImage:[UIImage imageWithColor:self.conf.backgroundColor] forState:UIControlStateNormal];
     [_sheetCancelBtn setBackgroundImage:[UIImage imageWithColor:self.conf.actionPressBGColor] forState:UIControlStateHighlighted];
     [_sheetCancelBtn.titleLabel setFont:self.conf.actionFont];
@@ -766,7 +777,7 @@
     _messageWildAlignmentCenter = NO;
     
     _messageFont        = [UIFont systemFontOfSize:14];
-    _messageOnlyFont    = [UIFont systemFontOfSize:16];
+    _messageOnlyFont    = [UIFont systemFontOfSize:16 weight:UIFontWeightMedium];
     _messageColor       = UIColorHex(0x333333FF);
     
     _linkColor           = UIColorHex(0x0067d8FF);
@@ -777,6 +788,9 @@
     _actionColor        = UIColorHex(0x333333FF);
     _actionHightedColor = UIColorHex(0x00A5FFFF);
     _actionPressBGColor = UIColorHex(0xF5F5F5FF);
+    
+    _sheetActionCancelColor  = UIColorHex(0x00A5FFFF);
+    _sheetActionFont = [UIFont systemFontOfSize:16 weight:UIFontWeightMedium];
     
     _actionHeight       = 50.f;
     

@@ -167,6 +167,13 @@
                                        title:@""
                                      message:@"请选择"
                                      actions:actions];
+        
+        
+        alert.update(^(ATAlertConf * _Nonnull conf) {
+            conf.backgroundColor = [UIColor blackColor];
+            conf.actionColor = [UIColor redColor];
+        });
+        
         [alert show];
         
     }
