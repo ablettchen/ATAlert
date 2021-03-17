@@ -103,7 +103,7 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 @property (nonatomic, strong) NSString *actionConfirmText;      ///< default is "确定".
 @property (nonatomic, strong) NSString *actionCancelText;       ///< default is "取消".
 
-@property (nonatomic, strong) NSString *sheetActionCancelColor; ///<  default is 0x00A5FFFF.
+@property (nonatomic, strong) UIColor *sheetActionCancelColor; ///<  default is 0x00A5FFFF.
 @property (nonatomic, strong) UIFont *sheetActionFont;          ///< default is [UIFont systemFontOfSize:16 weight:UIFontWeightMedium]
 
 - (void)reset;
