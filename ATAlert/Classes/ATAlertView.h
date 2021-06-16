@@ -73,6 +73,7 @@ typedef NS_ENUM(NSUInteger, ATAlertStyle) {
 
 @interface ATAlertConf : NSObject
 
+@property (nonatomic, assign) BOOL isShowAlertClose;            ///< defalt is NO
 @property (nonatomic, assign) BOOL touchWildToHide;             ///< preferredStyle == ATAlertStyleSheet ? : NO;
 @property (nonatomic, assign) CGFloat width;                    ///< default is 275.
 @property (nonatomic, assign) UIEdgeInsets insets;              ///< default is UIEdgeInsetsMake(25, 25, 25, 25).

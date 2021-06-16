@@ -129,6 +129,9 @@
                                      message:message
                                      actions:actions];
         [alert addMessageLinks:links];
+        alert.update(^(ATAlertConf * _Nonnull conf) {
+            conf.isShowAlertClose = YES;
+        });
         [alert show];
         
     }else if ([title isEqualToString:@"Alert - Input"]) {

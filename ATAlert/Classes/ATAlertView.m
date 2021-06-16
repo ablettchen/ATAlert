@@ -81,6 +81,8 @@
 @property (nonatomic, strong, readonly) YYLabel *titleLabel;
 @property (nonatomic, strong, readonly) YYLabel *messageLabel;
 
+@property (nonatomic, strong, readonly) UIButton *closeButton;
+
 @end
 
 @implementation ATAlertView
@@ -93,6 +95,7 @@
 @synthesize sheetCancelBtn = _sheetCancelBtn;
 @synthesize titleLabel = _titleLabel;
 @synthesize messageLabel = _messageLabel;
+@synthesize closeButton = _closeButton;
 
 - (void)dealloc {
 #ifdef DEBUG
@@ -130,7 +133,6 @@
         self.conf.cornerRadius = self.conf.cornerRadius;
         self.sheetCancelBtn.layer.cornerRadius = self.conf.cornerRadius;
         self.conf.messageColor = UIColorHex(0x666666FF);
-        
         self.backgroundColor = [UIColor clearColor];
         
     }else {
@@ -152,10 +154,12 @@
             self.backgroundColor = self.conf.backgroundColor;
             self.layer.borderWidth = self.conf.splitWidth;
             self.layer.borderColor = self.conf.splitColor.CGColor;
+            self.closeButton.alpha = self.conf.isShowAlertClose ? 1.0 : 0.0;
         }else {
             self.backgroundColor = [UIColor clearColor];
             self.layer.borderWidth = 0.0;
             self.layer.borderColor = [UIColor clearColor].CGColor;
+            self.closeButton.alpha = 0.0;
         }
 
         ///titleLabel
@@ -248,6 +252,15 @@
     return _backgroundView;
 }
 
+- (UIButton *)closeButton {
+    if (_closeButton) return _closeButton;
+    _closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_closeButton setImage:[UIImage imageNamed:@"button_close" inBundle:[ATAlertView alertBundle]] forState:UIControlStateNormal];
+    [_closeButton addTarget:self action:@selector(closeButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    _closeButton.alpha = 0.0;
+    return _closeButton;
+}
+
 - (UIView *)inputView {
     if (_inputView) return _inputView;
     _inputView = [UIView new];
@@ -294,6 +307,10 @@
 
 #pragma mark - Privite
 
+- (void)closeButtonAction:(UIButton *)sender {
+    [self hide];
+}
+
 - (void)actionTap:(UITapGestureRecognizer *)gesture {
     if (!self.conf.touchWildToHide) {return;}
     [self hide];
@@ -316,6 +333,12 @@
     [self.backgroundView addSubview:self];
     [self mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self.conf.width);
+    }];
+    
+    [self.backgroundView addSubview:self.closeButton];
+    [self.closeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(40, 40));
+        make.top.right.equalTo(self).insets(UIEdgeInsetsMake(-15, 0, 0, -15));
     }];
     
     MASViewAttribute *lastAttribute = self.mas_top;
@@ -746,6 +769,11 @@
     [self hide:self.didHide];
 }
 
++ (NSBundle *)alertBundle {
+    NSString *bundlePath = [[NSBundle bundleForClass:self.class].resourcePath stringByAppendingPathComponent:@"ATAlert.bundle"];
+    return [NSBundle bundleWithPath:bundlePath];
+}
+
 @end
 
 @implementation ATAlertConf
@@ -759,6 +787,7 @@
 
 - (void)reset {
     
+    _isShowAlertClose   = NO;
     _touchWildToHide    = NO;
     
     _width              = 275.f;
