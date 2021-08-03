@@ -116,7 +116,7 @@
     _textFields = [NSMutableArray array];
     
     _buttons = [NSMutableArray array];
-
+    
     self.preferredStyle = ATAlertStyleAlert;
     self.update(^(ATAlertConf * _Nonnull conf) {});
     
@@ -146,7 +146,7 @@
         @strongify(self);
         if (!self) return;
         if (block) block(self.conf);
-
+        
         self.backgroundView.backgroundColor = self.conf.dimBackgroundColor;
         self.layer.cornerRadius = self.conf.cornerRadius;
         
@@ -161,7 +161,7 @@
             self.layer.borderColor = [UIColor clearColor].CGColor;
             self.closeButton.alpha = 0.0;
         }
-
+        
         ///titleLabel
         self.titleLabel.backgroundColor = self.conf.backgroundColor;
         self.titleLabel.font = self.conf.titleFont;

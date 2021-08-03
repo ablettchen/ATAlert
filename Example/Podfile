@@ -1,9 +1,23 @@
 inhibit_all_warnings!
 platform :ios, '10.0'
+install! 'cocoapods', :warn_for_unused_master_specs_repo => false
 
-target 'ATAlert_Example' do
-  
+def pods
   pod 'ATAlert', :path => '../'
   pod 'ATToast'
+end
+
+target 'ATAlert_Example' do
+  pods
+  
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 10.0
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
+        end
+      end
+    end
+  end
   
 end
